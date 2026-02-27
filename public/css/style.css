@@ -1,0 +1,188 @@
+body {
+    background: linear-gradient(135deg, #0f0f12 0%, #1a1a24 100%);
+    color: #e0e0e0;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+.glass-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: radial-gradient(circle at 15% 50%, rgba(255, 255, 255, 0.03), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(200, 200, 200, 0.04), transparent 25%);
+}
+
+.glass-navbar {
+    background: rgba(20, 20, 25, 0.6) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-card {
+    background: rgba(30, 30, 35, 0.4);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+.glass-table {
+    color: #e0e0e0 !important;
+}
+
+.glass-table th {
+    color: #a0a0a5;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.glass-table td {
+    padding: 1rem 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03) !important;
+    vertical-align: middle;
+}
+
+.glass-table tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* DataTables Overrides */
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_processing,
+.dataTables_wrapper .dataTables_paginate {
+    color: #a0a0a5 !important;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.dataTables_wrapper .dataTables_filter input,
+.dataTables_wrapper .dataTables_length select {
+    background: rgba(20, 20, 25, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-radius: 6px;
+    padding: 0.4rem 0.8rem;
+    transition: all 0.3s;
+}
+
+.dataTables_wrapper .dataTables_filter input:focus,
+.dataTables_wrapper .dataTables_length select:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+}
+
+.page-item.disabled .page-link {
+    background-color: transparent;
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #6c757d;
+}
+
+.page-link {
+    background-color: rgba(30, 30, 35, 0.4);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #e0e0e0;
+}
+
+.page-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.page-item.active .page-link {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+/* Modals & Forms */
+.glass-modal .modal-content {
+    background: rgba(25, 25, 30, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 15px 50px 0 rgba(0, 0, 0, 0.5);
+}
+
+.glass-input {
+    background: rgba(15, 15, 18, 0.5) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #e0e0e0 !important;
+    transition: all 0.3s ease;
+}
+
+.glass-input:focus {
+    background: rgba(20, 20, 25, 0.8) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.05) !important;
+}
+
+.glass-input::placeholder {
+    color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.btn-glass {
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    transition: all 0.3s ease;
+}
+
+.btn-glass:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.glass-badge {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    font-weight: 400;
+    padding: 0.4em 0.8em;
+}
+
+.tracking-wide {
+    letter-spacing: 1.5px;
+}
+
+/* DataTables and Select Background Overrides */
+table.dataTable {
+    margin-top: 6px !important;
+    margin-bottom: 6px !important;
+}
+
+table.dataTable tbody tr.odd>*,
+table.dataTable tbody tr.even>* {
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+
+table.dataTable tbody td {
+    background-color: transparent !important;
+    color: #e0e0e0 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03) !important;
+}
+
+table.dataTable tbody tr:hover td,
+table.dataTable tbody tr:hover>* {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    box-shadow: none !important;
+}
+
+.dataTables_wrapper .dataTables_length select option,
+.glass-input option {
+    background-color: #1a1a24;
+    color: #e0e0e0;
+}
