@@ -1,9 +1,9 @@
 <?php
 class Database {
-    private static ?PDO $instance = null;
+    private $conn;
 
-    public static function getConnection(): PDO {
-        if (self::$instance === null) {
+    public function connect() {
+        if ($this->conn === null) {
             try {
                 $dsn = 'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=' . DB_CHARSET;
                 $options = [
@@ -11,15 +11,12 @@ class Database {
                     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
                     PDO::ATTR_EMULATE_PREPARES   => false,
                 ];
-                self::$instance = new PDO($dsn, DB_USER, DB_PASS, $options);
+                $this->conn = new PDO($dsn, DB_USER, DB_PASS, $options);
             } catch (PDOException $e) {
                 http_response_code(500);
                 die(json_encode(['error' => 'Database connection failed: ' . $e->getMessage()]));
             }
         }
-        return self::$instance;
+        return $this->conn;
     }
-
-    private function __construct() {}
-    private function __clone() {}
 }
