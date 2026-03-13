@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>LibraBase Frontend - UTS</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        .hidden { display: none; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px;}
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: left;}
+        .btn-hapus { background-color: #dc3545; color: white; border: none; padding: 5px 10px; cursor: pointer; }
+        .form-tambah { background: #f9f9f9; padding: 15px; margin-bottom: 20px; border: 1px solid #ddd; }
+    </style>
+</head>
+<body>
+    <h1>LibraBase - Ujian Praktikum PABP</h1>
+
+    <div id="loginSection">
+        <h2>Login Admin</h2>
+        <input type="email" id="email" placeholder="Email (cth: kibar@test.com)"><br><br>
+        <input type="password" id="password" placeholder="Password"><br><br>
+        <button onclick="login()">Login</button>
+    </div>
+
+    <div id="bookSection" class="hidden">
+        <button onclick="logout()" style="float: right;">Logout</button>
+        <h2>Daftar Buku LibraBase</h2>
+        
+        <div class="form-tambah">
+            <h3>+ Tambah Buku Baru</h3>
+            <form onsubmit="tambahBuku(event)">
+                <input type="text" id="inputJudul" placeholder="Judul Buku" required>
+                <input type="text" id="inputPenulis" placeholder="Penulis" required>
+                <button type="submit">Simpan Data</button>
+            </form>
+        </div>
+
+        <button onclick="fetchBooks()">Refresh Tabel</button>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Judul Buku</th>
+                    <th>Penulis</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody id="bookList"></tbody>
+        </table>
+    </div>
+
+    <script>
+        // PASTIKAN URL INI SESUAI DENGAN FOLDER BACKEND KAMU
+        const API_URL = "http://localhost/praktikum3-webprog-main/api.php";
+
+        // Cek sesi login saat halaman dimuat
+        if(localStorage.getItem('jwt_token')) {
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('bookSection').classList.remove('hidden');
+            fetchBooks();
+        }
+
+        // --- FUNGSI LOGIN ---
+        async function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            const response = await fetch(`${API_URL}?resource=auth&action=login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+            const result = await response.json();
+            
+            if(result.success) {
+                localStorage.setItem('jwt_token', result.token);
+                alert('Login Berhasil!');
+                location.reload();
+            } else {
+                alert('Login Gagal: ' + result.message);
+            }
+        }
+
+        // --- FUNGSI READ (Ambil Data) ---
+        async function fetchBooks() {
+            const token = localStorage.getItem('jwt_token');
+            const response = await fetch(`${API_URL}?resource=books`, {
+                method: 'GET',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            
+            if(response.status === 401) {
+                alert("Sesi JWT habis atau tidak valid, silakan login ulang");
+                logout();
+                return;
+            }
+
+            const result = await response.json();
+            let html = '';
+            
+            // Looping data buku dan tambahkan tombol Hapus
+            if(result.data) {
+                result.data.forEach(book => {
+                    html += `
+                        <tr>
+                            <td>${book.id}</td>
+                            <td>${book.title}</td>
+                            <td>${book.author}</td>
+                            <td>
+                                <button class="btn-hapus" onclick="hapusBuku(${book.id})">Hapus</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            } else {
+                html = '<tr><td colspan="4">Tidak ada data buku</td></tr>';
+            }
+            document.getElementById('bookList').innerHTML = html;
+        }
+
+        // --- FUNGSI CREATE (Tambah Data) ---
+        async function tambahBuku(event) {
+            event.preventDefault(); 
+            const token = localStorage.getItem('jwt_token');
+            
+            // Kita tambahkan data dummy untuk kolom yang wajib ada di database
+            const newBook = {
+                title: document.getElementById('inputJudul').value,
+                author: document.getElementById('inputPenulis').value,
+                genre: "General",
+                isbn: "000000000",
+                year: 2026,
+                stock: 1,
+                description: "Buku baru"
+            };
+
+            const response = await fetch(`${API_URL}?resource=books`, {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` 
+                },
+                body: JSON.stringify(newBook)
+            });
+
+            const result = await response.json();
+            if(result.success) {
+                alert('Buku berhasil ditambahkan!');
+                document.getElementById('inputJudul').value = '';
+                document.getElementById('inputPenulis').value = '';
+                fetchBooks(); 
+            } else {
+                alert('Gagal: ' + result.message);
+            }
+        }
+
+        // --- FUNGSI DELETE (Hapus Data) ---
+        async function hapusBuku(id) {
+            if(!confirm("Yakin ingin menghapus buku ini?")) return;
+            
+            const token = localStorage.getItem('jwt_token');
+            const response = await fetch(`${API_URL}?resource=books&id=${id}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            const result = await response.json();
+            if(result.success) {
+                alert('Buku berhasil dihapus!');
+                fetchBooks(); 
+            }
+        }
+
+        // --- FUNGSI LOGOUT ---
+        function logout() {
+            localStorage.removeItem('jwt_token');
+            location.reload();
+        }
+    </script>
+</body>
+</html>
